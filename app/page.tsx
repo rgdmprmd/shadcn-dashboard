@@ -6,7 +6,7 @@ const AboutPage = () => {
   return (
     <main className="flex flex-col row-start-2 gap-[24px] ">
       <h1>Hello, my name is Rangga</h1>
-      <ol className="list-inside list-decimal text-sm/6 font-[family-name:var(--font-geist-mono)]">
+      <ol className="list-inside list-decimal text-sm/6 font-[family-name:var(--font-geist-mono)] text-muted-foreground">
         <li className="tracking-[-.01em]">Lorem ipsum dolor sit amet.</li>
         <li className="tracking-[-.01em]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore.</li>
       </ol>
