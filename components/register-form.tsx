@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ const formSchema = z.object({
 });
 
 export const RegisterForm = () => {
+  const [isLoad, setIsLoad] = useState(false);
   const router = useRouter();
 
   //#region  //*=========== Store ===========
@@ -40,11 +41,16 @@ export const RegisterForm = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
+    const loadingToast = toast.loading("Loading");
+    setIsLoad(true);
+
     // console.log(values);
     const res = await register(values);
 
     if (!res.success) {
       toast.error(res.message);
+      toast.dismiss(loadingToast);
+      setIsLoad(false);
     } else {
       localStorage.setItem("token", res.token);
 
@@ -56,7 +62,9 @@ export const RegisterForm = () => {
       });
 
       toast.success(`Hello ${values.email.split("@")[0]}`);
+      toast.dismiss(loadingToast);
 
+      setIsLoad(false);
       router.push("/auth");
     }
   }
@@ -110,8 +118,8 @@ export const RegisterForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full cursor-pointer">
-            Register
+          <Button type="submit" className="w-full cursor-pointer" disabled={isLoad}>
+            {isLoad ? "Loading..." : "Register"}
           </Button>
         </form>
       </Form>

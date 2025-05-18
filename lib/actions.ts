@@ -19,7 +19,7 @@ export async function authenticate(values: LoginValues) {
   delay(2000);
 
   try {
-    const res = await fetch("http://localhost:1337/api/v1/auth/login", {
+    const res = await fetch(`${process.env.BASE_URL}/api/v1/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -39,7 +39,7 @@ export async function register(values: RegisterValues) {
   const { name, email, password } = values;
 
   try {
-    const res = await fetch("http://localhost:1337/api/v1/auth/register", {
+    const res = await fetch(`${process.env.BASE_URL}/api/v1/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -58,7 +58,7 @@ export async function register(values: RegisterValues) {
 export async function getCurrentUser(token: string) {
   console.log("getCurrentUser got hit");
   try {
-    const res = await fetch("http://localhost:1337/api/v1/auth/me", {
+    const res = await fetch(`${process.env.BASE_URL}/api/v1/auth/me`, {
       method: "GET",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     });

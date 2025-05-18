@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ const formSchema = z.object({
 
 export const LoginForm = () => {
   const router = useRouter();
+  const [isLoad, setIsLoad] = useState(false);
 
   //#region  //*=========== Store ===========
   const login = useAuthStore.useLogin();
@@ -37,12 +38,17 @@ export const LoginForm = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    const loadingToast = toast.loading("Loading");
+    setIsLoad(true);
 
     // console.log(values);
     const res = await authenticate(values);
 
     if (!res.success) {
       toast.error("Oops, Invalid credentials. Please try again");
+      toast.dismiss(loadingToast);
+
+      setIsLoad(false);
     } else {
       localStorage.setItem("token", res.token);
 
@@ -54,6 +60,9 @@ export const LoginForm = () => {
       });
 
       toast.success(`Hello ${res.data.name}`);
+      toast.dismiss(loadingToast);
+
+      setIsLoad(false);
 
       router.push("/auth");
     }
@@ -93,8 +102,8 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          <Button type="submit" className="w-full cursor-pointer">
-            Login
+          <Button type="submit" className="w-full cursor-pointer" disabled={isLoad}>
+            {isLoad ? "Loading..." : "Login"}
           </Button>
           {/* <Button type="button" variant="outline" className="w-full">
 			Login with Google
