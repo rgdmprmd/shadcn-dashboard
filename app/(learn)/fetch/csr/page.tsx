@@ -1,16 +1,16 @@
 "use client";
 
-import Image from "next/image";
+import Apod from "@/components/apod";
 import React, { useEffect, useState } from "react";
 
-interface ApodProps {
+export interface ApodProps {
   date: string;
   explanation: string;
   hdurl: string;
   media_type: string;
   service_version: string;
   title: string;
-  url: string;
+  url?: string;
 }
 
 const CsrPage = () => {
@@ -51,15 +51,7 @@ const CsrPage = () => {
         <p>The behavior of this method is page rendered right away even the fetch is still loading. You even can see the loading state.</p>
       </div>
       {loading && <div className="text-sm/6 font-[family-name:var(--font-geist-mono)] animate-pulse">Relax, let this loading first</div>}
-      {apod && (
-        <div className="flex flex-col gap-4 border p-4 text-sm/6 font-[family-name:var(--font-geist-mono)] max-w-[600px]">
-          <Image src={apod.url} alt={apod.title} width={600} height={600} />
-          <h1>
-            <span className="text-muted-foreground">{apod.date}</span> - {apod.title}
-          </h1>
-          <p className="text-muted-foreground">{apod.explanation.split(". ")[0]}.</p>
-        </div>
-      )}
+      {apod && <Apod apod={apod} />}
     </main>
   );
 };

@@ -1,5 +1,5 @@
+import Apod from "@/components/apod";
 import { delay } from "@/lib/actions";
-import Image from "next/image";
 
 const SsrPage = async () => {
   await delay(1000);
@@ -13,15 +13,7 @@ const SsrPage = async () => {
         <p>The name is self explained of the behavior. Component will only render when fetch is resolve.</p>
         <p>You can&apos;t see a glimps of the page before fetch is finish. So, you also cannot see the loading indicator.</p>
       </div>
-      {apod && (
-        <div className="flex flex-col gap-4 border p-4 text-sm/6 font-[family-name:var(--font-geist-mono)] max-w-[600px]">
-          <Image src={apod.url} alt={apod.title} width={600} height={600} />
-          <h1>
-            <span className="text-muted-foreground">{apod.date}</span> - {apod.title}
-          </h1>
-          <p className="text-muted-foreground">{apod.explanation.split(". ")[0]}.</p>
-        </div>
-      )}
+      {apod && <Apod apod={apod} />}
     </main>
   );
 };

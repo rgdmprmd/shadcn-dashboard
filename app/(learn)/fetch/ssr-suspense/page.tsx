@@ -1,6 +1,6 @@
+import Apod from "@/components/apod";
 import LoadingSpinner from "@/components/loading-spinner";
 import { delay } from "@/lib/actions";
-import Image from "next/image";
 import { Suspense } from "react";
 
 const SsrPage = async () => {
@@ -23,19 +23,7 @@ const Content = async () => {
   const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
   const apod = await res.json();
 
-  return (
-    <div>
-      {apod && (
-        <div className="flex flex-col gap-4 border p-4 text-sm/6 font-[family-name:var(--font-geist-mono)] max-w-[600px]">
-          <Image src={apod.url} alt={apod.title} width={600} height={600} />
-          <h1>
-            <span className="text-muted-foreground">{apod.date}</span> - {apod.title}
-          </h1>
-          <p className="text-muted-foreground">{apod.explanation.split(". ")[0]}.</p>
-        </div>
-      )}
-    </div>
-  );
+  return <div>{apod && <Apod apod={apod} />}</div>;
 };
 
 export default SsrPage;
