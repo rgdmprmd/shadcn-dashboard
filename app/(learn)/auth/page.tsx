@@ -5,15 +5,16 @@ import withAuth from "@/components/with-auth";
 import useAuthStore from "@/store/useAuthStore";
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const user = useAuthStore.useUser();
 
   const contents = [
-    { title: "Login", href: "/auth/login" },
-    { title: "Register", href: "/auth/register" },
-    { title: "Protected", href: "/auth/protected" },
-    { title: "Public", href: "/auth/public" },
+    { title: "Login", href: "/auth/login", role: "auth" },
+    { title: "Register", href: "/auth/register", role: "auth" },
+    { title: "Protected", href: "/auth/protected", role: "all" },
+    { title: "Public", href: "/auth/public", role: "optional" },
   ];
 
   return (
@@ -26,9 +27,19 @@ const AuthPage = () => {
           {contents &&
             contents.map((content) => (
               <li className="text-muted-foreground hover:text-accent-foreground" key={content.href}>
-                <Link href={content.href} className="text-muted-foreground hover:text-accent-foreground hover:underline hover:underline-offset-4">
-                  {content.title}
-                </Link>
+                {content.role === "auth" && user ? (
+                  <Link
+                    href="#"
+                    className="text-muted-foreground hover:text-accent-foreground hover:underline hover:underline-offset-4"
+                    onClick={() => toast.warning("You already logged in, so cannot access this route!")}
+                  >
+                    {content.title}
+                  </Link>
+                ) : (
+                  <Link href={content.href} className="text-muted-foreground hover:text-accent-foreground hover:underline hover:underline-offset-4">
+                    {content.title}
+                  </Link>
+                )}
               </li>
             ))}
         </ol>
