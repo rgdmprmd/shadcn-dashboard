@@ -112,12 +112,12 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(Compon
           // Prevent authenticated user from accessing auth or other role pages
           if (routeRole === "auth") {
             // Already logged in but trying to access login/register
-            router.replace(redirect ?? "/auth");
+            router.replace(redirect ?? HOME_ROUTE);
           }
         } else {
           // Prevent unauthenticated user from accessing protected pages
           if (routeRole !== "auth" && routeRole !== "optional") {
-            router.replace(`/auth/login?redirect=${pathname}`);
+            router.replace(`${LOGIN_ROUTE}?redirect=${pathname}`);
 
             // router.replace(`${LOGIN_ROUTE}?redirect=${router.asPath}`, `${LOGIN_ROUTE}`);
           }
@@ -142,5 +142,13 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(Compon
     return <Component {...(props as T)} user={user} />;
   };
 
-  return ComponentWithAuth;
+  // return ComponentWithAuth;
+  // 👇 Return a new component wrapped in <Suspense> automatically
+  return function WithAuthWithSuspense(props: Omit<T, keyof WithAuthProps>) {
+    return (
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <ComponentWithAuth {...props} />
+      </React.Suspense>
+    );
+  };
 }
